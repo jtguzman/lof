@@ -1,0 +1,21 @@
+{
+  "space": [
+    {
+      "space": {
+        "space": {
+          "space": {},
+          "name": "form"
+        },
+        "name": "form"
+      },
+      "name": "form"
+    },
+    [
+      {
+        "space": {},
+        "name": "form"
+      }
+    ]
+  ],
+  "name": "formWithComplexDepth"
+}

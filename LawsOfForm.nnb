@@ -10,7 +10,7 @@
         {
             "language": "typescript",
             "source": [
-                "// 2. Forms Taken Out of the Form\n\n// Draw a distinction\nconst { display } = require('node-kernel');\nconst pug = require('pug');\n\n// The Form\nconst form: Distiction = {\n  space: {},\n  name: 'form'\n}\n\nlet output = pug.renderFile('./views/expression.pug', {...form});\ndisplay.html(output);"
+                "// 2. Forms Taken Out of the Form\n\n// Draw a distinction\nconst { display } = require('node-kernel');\nconst pug = require('pug');\n\n// The Form\nconst form: Distiction = {\n  space: {},\n  name: 'f'\n}\n\nlet output = pug.renderFile('./views/expression.pug', {...form});\ndisplay.html(output);"
             ],
             "outputs": [
                 {
@@ -110,7 +110,36 @@
                         {
                             "mime": "text/html",
                             "value": [
-                                "<style> table, th, tr { text-align: left; }</style><link rel=\"stylesheet\" type=\"text/css\" href=\"./style.css\"/><div class=\"context\"><div class=\"distinction\"><p class=\"name\">equation</p><div class=\"distinction\"><p class=\"name\">expression</p><div class=\"distinction\"><p class=\"name\">form</p></div></div></div><h1>=</h1><div class=\"distinction\"><p class=\"name\">equation</p><div class=\"distinction\"><p class=\"name\">expression</p><div class=\"distinction\"><p class=\"name\">form</p></div></div></div></div>"
+                                "<style> table, th, tr { text-align: left; }</style><link rel=\"stylesheet\" type=\"text/css\" href=\"./style.css\"/><div class=\"context\"><div class=\"distinction\"><p class=\"name\">equation</p><div class=\"distinction\"><p class=\"name\">expression</p><div class=\"distinction\"><p class=\"name\">form</p></div></div></div><h3 class=\"operator\">=</h3><div class=\"distinction\"><p class=\"name\">equation</p><div class=\"distinction\"><p class=\"name\">expression</p><div class=\"distinction\"><p class=\"name\">form</p></div></div></div></div>"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "language": "typescript",
+            "source": [
+                "// Depth\n// Iterate an expression and count how many levels of depth it has\nconst depth = (expression: Distiction) => {\n  let level = 0;\n  let current = expression;\n  while (current.space) {\n    level++;\n    current = current.space;\n  }\n\n  if (Array.isArray(current)) {\n    for (let i = 0; i < current.length; i++) {\n      if (depth(current[i]) >= level) {\n        level += depth(current[i]);\n      }\n    }\n  }\n\n  return level\n}\n\nconst formWithComplexDpth: Distiction = {\n  space: [{...form, ...cross(form, cross(form, form))}, {...form}, {...form, ...cross(form, form)}],\n  name: 'formWithComplexDepth'\n}\n\nconsole.log('depth', depth(formWithComplexDpth))\ndraw(formWithComplexDpth)"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "application/vnd.code.notebook.stdout",
+                            "value": [
+                                "depth 4",
+                                ""
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "items": [
+                        {
+                            "mime": "text/html",
+                            "value": [
+                                "<style> table, th, tr { text-align: left; }</style><link rel=\"stylesheet\" type=\"text/css\" href=\"./style.css\"/><div class=\"context\"><div class=\"distinction\"><p class=\"name\">formWithComplexDepth</p><div class=\"distinction\"><p class=\"name\">form</p><div class=\"distinction\"><p class=\"name\">form</p><div class=\"distinction\"><p class=\"name\">form</p></div></div></div><div class=\"distinction\"><p class=\"name\">form</p></div><div class=\"distinction\"><p class=\"name\">form</p><div class=\"distinction\"><p class=\"name\">form</p></div></div></div></div>"
                             ]
                         }
                     ]
