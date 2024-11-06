@@ -3,7 +3,7 @@
         {
             "language": "typescript",
             "source": [
-                "// 1. The Form\n\n// Distinction is perfect continence\ntype Distiction = {\n  space: Distiction | Array<Distiction>,\n  name: string\n}\n\n// Axiom 1. Law of calling\nconst calling: any = (m: any, n: any) => {\n  if (m.toString() === n.toString()) return m;\n  return false\n}\n\n// Axiom 2. Law of crossing\nconst crossing: any = (m: any, n: any) => {\n  if (m.toString() === n.toString()) return false;\n  return m\n}"
+                "// 1. The Form\n\n// Distinction is perfect continence\ntype Distiction = {\n  space: Distiction | Array<Distiction>,\n  name: string\n}\n\n// Axiom 1. Law of calling\nconst calling: any = (m: any, n: any) => {\n  console.log(JSON.stringify(m), JSON.stringify(n))\n  if (JSON.stringify(m) === JSON.stringify(n)) return m;\n  return false\n}\n\n// Axiom 2. Law of crossing\nconst crossing: any = (m: any, n: any) => {\n  if (JSON.stringify(m) === JSON.stringify(n)) return false;\n  return m\n}"
             ],
             "outputs": []
         },
@@ -18,7 +18,7 @@
                         {
                             "mime": "text/html",
                             "value": [
-                                "<style> table, th, tr { text-align: left; }</style><link rel=\"stylesheet\" type=\"text/css\" href=\"./style.css\"/><div class=\"distinction\"><p class=\"name\">form - 0</p></div>"
+                                "<style> table, th, tr { text-align: left; }</style><link rel=\"stylesheet\" type=\"text/css\" href=\"./style.css\"/><div class=\"context\"><div class=\"distinction\"><p class=\"name\">form</p></div></div>"
                             ]
                         }
                     ]
@@ -46,7 +46,7 @@
         {
             "language": "typescript",
             "source": [
-                "// Form of Condensation ]] = ]\n// Take an expresion the inmediate space og the expression will be evaluated.\nconst condensation = (expression: Distiction) => {\n  if (Array.isArray(expression.space) && (expression.space.length % 2 === 0)) {\n    const half = Math.floor(expression.space.length / 2)\n    let left = expression.space.slice(0, half);\n    let right = expression.space.slice(half, expression.space.length);\n    \n    const equivalence = calling(left, right);\n    if (equivalence) {\n      return {\n        space: equivalence,\n        name: expression.name\n      }\n    }\n  }\n  return false;\n}\n\nconst expressionToCondensate: Distiction = {\n  space: [{ ...form }, { ...form }],\n  name: 'expression'\n}\n\ndraw({...expressionToCondensate})\ndraw(condensation(expressionToCondensate))\n//draw(result)\n\n\n\n\n"
+                "// Form of Condensation [][] = []\n// Take an expresion the inmediate space of the expression will be evaluated.\nconst condensation: Distinction = (expression: Distiction) => {\n  if (Array.isArray(expression.space) && (expression.space.length % 2 === 0)) {\n    const half = Math.floor(expression.space.length / 2)\n    let left = expression.space.slice(0, half);\n    let right = expression.space.slice(half, expression.space.length);\n    console.log(left)\n    console.log(right)\n    const equivalence = calling(left, right);\n    console.log(equivalence)\n    if (equivalence) {\n      return {\n        space: equivalence,\n        name: expression.name\n      }\n    }\n  }\n  return expression;\n}\n\nconst expressionToCondensate: Distiction = {\n  space: [{ ...form }, { ...form }],\n  name: 'expression'\n}\n\ndraw({...expressionToCondensate})\ndraw(condensation(expressionToCondensate))"
             ],
             "outputs": [
                 {
@@ -54,6 +54,9 @@
                         {
                             "mime": "application/vnd.code.notebook.stdout",
                             "value": [
+                                "[ { space: {}, name: 'form' } ]",
+                                "[ { space: {}, name: 'form' } ]",
+                                "[{\"space\":{},\"name\":\"form\"}] [{\"space\":{},\"name\":\"form\"}]",
                                 "[ { space: {}, name: 'form' } ]",
                                 ""
                             ]
@@ -81,6 +84,13 @@
                     ]
                 }
             ]
+        },
+        {
+            "language": "typescript",
+            "source": [
+                "// Form of Cancelation [[]] = false\n// Take an expresion the inmediate space of the expression will be evaluated.\n"
+            ],
+            "outputs": []
         },
         {
             "language": "typescript",
