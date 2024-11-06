@@ -120,7 +120,7 @@
                         {
                             "mime": "text/html",
                             "value": [
-                                "<style> table, th, tr { text-align: left; }</style><link rel=\"stylesheet\" type=\"text/css\" href=\"./style.css\"/><div class=\"context\"><div class=\"distinction\"><p class=\"name\">cancelation</p></div></div>"
+                                "<style> table, th, tr { text-align: left; }</style><link rel=\"stylesheet\" type=\"text/css\" href=\"./style.css\"/><div class=\"context\"></div>"
                             ]
                         }
                     ]
@@ -130,7 +130,7 @@
         {
             "language": "typescript",
             "source": [
-                "// Form of Compensation  = [[]]\nconst compensation = (expression: Distiction, form: Distiction) => {\n  let compensatedSpace = []\n  if (Object.keys(expression.space).length === 0 || expression.space.length === 0) {\n    compensatedSpace = [].concat(cross(form, form))\n  } else {\n    compensatedSpace = [].concat(cross(form, form), expression.space)\n  }\nreturn {\n    space: compensatedSpace,\n    name: expression.name\n  }\n}\n\nconst compesationForm: Distiction = {\n  space: {},\n  name: 'compensation'\n}\n\ndraw(compesationForm)\ndraw(compensation(compesationForm, form))"
+                "// Form of Compensation  = [[]]\nconst compensation = (expression: Distiction, form: Distiction = false) => {\n  if (!form) {\n    form = {...expression}\n  }\n  let compensatedSpace = []\n  if (Object.keys(expression.space).length === 0 || expression.space.length === 0) {\n    compensatedSpace = [].concat(cross(form, form))\n  } else {\n    compensatedSpace = [].concat(cross(form, form), expression.space)\n  }\nreturn {\n    space: compensatedSpace,\n    name: expression.name\n  }\n}\n\nconst compesationForm: Distiction = {\n  space: {},\n  name: 'compensation'\n}\n\ndraw(compesationForm)\ndraw(compensation(compesationForm, form))"
             ],
             "outputs": [
                 {
@@ -166,7 +166,7 @@
                         {
                             "mime": "text/html",
                             "value": [
-                                "<style> table, th, tr { text-align: left; }</style><link rel=\"stylesheet\" type=\"text/css\" href=\"./style.css\"/><div class=\"context\"><div class=\"distinction\"><p class=\"name\">equation</p><div class=\"distinction\"><p class=\"name\">expression</p><div class=\"distinction\"><p class=\"name\">form</p></div></div></div><h3 class=\"operator\">=</h3><div class=\"distinction\"><p class=\"name\">equation</p><div class=\"distinction\"><p class=\"name\">expression</p><div class=\"distinction\"><p class=\"name\">form</p></div></div></div></div>"
+                                "<style> table, th, tr { text-align: left; }</style><link rel=\"stylesheet\" type=\"text/css\" href=\"./style.css\"/><div class=\"context\"><div class=\"distinction\"><p class=\"name\">equation</p><div class=\"distinction\"><p class=\"name\">expression</p><div class=\"distinction\"><p class=\"name\">form</p></div></div></div><h2 class=\"operator\">=</h2><div class=\"distinction\"><p class=\"name\">equation</p><div class=\"distinction\"><p class=\"name\">expression</p><div class=\"distinction\"><p class=\"name\">form</p></div></div></div></div>"
                             ]
                         }
                     ]
@@ -205,7 +205,7 @@
         {
             "language": "typescript",
             "source": [
-                "// The Concept of Calculation\n// Step ⇀ \n\ntype Step = {\n  expression: Distiction,\n  operation: Function\n  result: Distiction\n  name: string\n}\n\nconst step: Step = (expression: Distiction, operation: Function, options: Distiction) => {\n  return {\n    expression,\n    operation,\n    result: operation(expression, {...options}),\n    name: operation.name\n  }\n}\n\nconst drawStep = (step: Step) => {\n  const output = pug.renderFile('./views/step.pug', {...step});\n  display.html(output)\n}\n\nconst condensationStep: Step = step(condensationForm, condensation)\nconst confirmationStep: Step = step(confirmationForm, confirmation)\nconst cancelationStep: Step = step(cancelationForm, cancelation)\nconst compensationStep: Step = step(compesationForm, compensation, form)\n\ndrawStep(condensationStep)\ndrawStep(confirmationStep)\ndrawStep(cancelationStep)\ndrawStep(compensationStep)"
+                "// The Concept of Calculation\n// Step ⇀ \n\ntype Step = {\n  expression: Distiction,\n  operation: Function\n  result: Distiction\n  name: string\n}\n\nconst step: Step = (expression: Distiction, operation: Function, options: Distiction) => {\n  return {\n    expression,\n    operation,\n    result: () => operation(expression, {...options}),\n    name: operation.name\n  }\n}\n\nconst drawStep = (step: Step | Array<Step>) => {\n  if (Array.isArray(step)) {\n    step.forEach(s => drawStep(s))\n    return\n  }\n  const output = pug.renderFile('./views/step.pug', {...step});\n  display.html(output)\n}\n\nconst condensationStep: Step = step(condensationForm, condensation)\nconst confirmationStep: Step = step(confirmationForm, confirmation)\nconst cancelationStep: Step = step(cancelationForm, cancelation)\nconst compensationStep: Step = step(compesationForm, compensation, form)\n\ndrawStep(condensationStep)\ndrawStep(confirmationStep)\ndrawStep(cancelationStep)\ndrawStep(compensationStep)"
             ],
             "outputs": [
                 {
@@ -233,7 +233,7 @@
                         {
                             "mime": "text/html",
                             "value": [
-                                "<style> table, th, tr { text-align: left; }</style><link rel=\"stylesheet\" type=\"text/css\" href=\"./style.css\"/><div class=\"context\"><div class=\"distinction\"><p class=\"name\">cancelation</p><div class=\"distinction\"><p class=\"name\">form</p><div class=\"distinction\"><p class=\"name\">form</p></div></div></div><h3 class=\"operator\">&rharu;</h3><div class=\"distinction\"><p class=\"name\">cancelation</p></div><p class=\"step\">cancelation</p></div>"
+                                "<style> table, th, tr { text-align: left; }</style><link rel=\"stylesheet\" type=\"text/css\" href=\"./style.css\"/><div class=\"context\"><div class=\"distinction\"><p class=\"name\">cancelation</p><div class=\"distinction\"><p class=\"name\">form</p><div class=\"distinction\"><p class=\"name\">form</p></div></div></div><h3 class=\"operator\">&rharu;</h3><p class=\"step\">cancelation</p></div>"
                             ]
                         }
                     ]
@@ -244,6 +244,64 @@
                             "mime": "text/html",
                             "value": [
                                 "<style> table, th, tr { text-align: left; }</style><link rel=\"stylesheet\" type=\"text/css\" href=\"./style.css\"/><div class=\"context\"><div class=\"distinction\"><p class=\"name\">compensation</p></div><h3 class=\"operator\">&rharu;</h3><div class=\"distinction\"><p class=\"name\">compensation</p><div class=\"distinction\"><p class=\"name\">form</p><div class=\"distinction\"><p class=\"name\">form</p></div></div></div><p class=\"step\">compensation</p></div>"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "language": "typescript",
+            "source": [
+                "// Calculus\ntype Calculus = {\n  expression: Distiction\n  steps: Array<Step>,\n  result: Distiction\n}\n\nconst calculus: Calculus = (expression: Distiction, operations: Array<Function>) => {\n  let calculusSteps: Step[] = []\n  for (let i = 0; i < operations.length; i++) {\n    const operation = operations[i];\n    if (i === 0) {\n      calculusSteps.push(step(expression, operation))\n    } else {\n      calculusSteps.push(step(calculusSteps[i - 1].result(), operation))\n    }\n  }\n\n  return {\n    expression,\n    steps: calculusSteps,\n    result: calculusSteps[calculusSteps.length - 1].result()\n  }\n\n}\n\nconst calculatedSteps = calculus(condensationForm, [condensation, condensation, confirmation, cancelation, compensation])\ndrawStep(calculatedSteps.steps)"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "text/html",
+                            "value": [
+                                "<style> table, th, tr { text-align: left; }</style><link rel=\"stylesheet\" type=\"text/css\" href=\"./style.css\"/><div class=\"context\"><div class=\"distinction\"><p class=\"name\">condensation</p><div class=\"distinction\"><p class=\"name\">form</p></div><div class=\"distinction\"><p class=\"name\">form</p></div></div><h3 class=\"operator\">&rharu;</h3><div class=\"distinction\"><p class=\"name\">condensation</p><div class=\"distinction\"><p class=\"name\">form</p></div></div><p class=\"step\">condensation</p></div>"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "items": [
+                        {
+                            "mime": "text/html",
+                            "value": [
+                                "<style> table, th, tr { text-align: left; }</style><link rel=\"stylesheet\" type=\"text/css\" href=\"./style.css\"/><div class=\"context\"><div class=\"distinction\"><p class=\"name\">condensation</p><div class=\"distinction\"><p class=\"name\">form</p></div></div><h3 class=\"operator\">&rharu;</h3><div class=\"distinction\"><p class=\"name\">condensation</p><div class=\"distinction\"><p class=\"name\">form</p></div></div><p class=\"step\">condensation</p></div>"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "items": [
+                        {
+                            "mime": "text/html",
+                            "value": [
+                                "<style> table, th, tr { text-align: left; }</style><link rel=\"stylesheet\" type=\"text/css\" href=\"./style.css\"/><div class=\"context\"><div class=\"distinction\"><p class=\"name\">condensation</p><div class=\"distinction\"><p class=\"name\">form</p></div></div><h3 class=\"operator\">&rharu;</h3><div class=\"distinction\"><p class=\"name\">condensation</p></div><p class=\"step\">confirmation</p></div>"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "items": [
+                        {
+                            "mime": "text/html",
+                            "value": [
+                                "<style> table, th, tr { text-align: left; }</style><link rel=\"stylesheet\" type=\"text/css\" href=\"./style.css\"/><div class=\"context\"><div class=\"distinction\"><p class=\"name\">condensation</p></div><h3 class=\"operator\">&rharu;</h3><p class=\"step\">cancelation</p></div>"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "items": [
+                        {
+                            "mime": "text/html",
+                            "value": [
+                                "<style> table, th, tr { text-align: left; }</style><link rel=\"stylesheet\" type=\"text/css\" href=\"./style.css\"/><div class=\"context\"><h3 class=\"operator\">&rharu;</h3><div class=\"distinction\"><p class=\"name\">condensation</p><div class=\"distinction\"><p class=\"name\"></p></div></div><p class=\"step\">compensation</p></div>"
                             ]
                         }
                     ]
