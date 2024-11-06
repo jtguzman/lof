@@ -46,7 +46,35 @@
         {
             "language": "typescript",
             "source": [
-                "// Form of Condensation [][] = []\n// Take an expresion the inmediate space of the expression will be evaluated.\nconst condensation: Distinction = (expression: Distiction) => {\n  if (Array.isArray(expression.space) && (expression.space.length % 2 === 0)) {\n    const half = Math.floor(expression.space.length / 2)\n    let left = expression.space.slice(0, half);\n    let right = expression.space.slice(half, expression.space.length);\n    const equivalence = calling(left, right);\n    if (equivalence) {\n      return {\n        space: equivalence,\n        name: expression.name\n      }\n    }\n  }\n  return expression;\n}\n\nconst expressionToCondensate: Distiction = {\n  space: [{ ...form }, { ...form }],\n  name: 'expression'\n}\n\ndraw({...expressionToCondensate})\ndraw(condensation(expressionToCondensate))"
+                "// Form of Condensation [][] = []\n// Take an expresion the inmediate space of the expression will be evaluated.\nconst condensation: Distinction = (expression: Distiction) => {\n  if (Array.isArray(expression.space) && (expression.space.length % 2 === 0)) {\n    const half = Math.floor(expression.space.length / 2)\n    let left = expression.space.slice(0, half);\n    let right = expression.space.slice(half, expression.space.length);\n    const evaluation = calling(left, right);\n    if (evaluation) {\n      return {\n        space: evaluation,\n        name: expression.name\n      }\n    }\n  }\n  return expression;\n}\n\nconst condensationForm: Distiction = {\n  space: [{ ...form }, { ...form }],\n  name: 'condensation'\n}\n\ndraw({...condensationForm})\ndraw(condensation(condensationForm))"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "text/html",
+                            "value": [
+                                "<style> table, th, tr { text-align: left; }</style><link rel=\"stylesheet\" type=\"text/css\" href=\"./style.css\"/><div class=\"context\"><div class=\"distinction\"><p class=\"name\">condensation</p><div class=\"distinction\"><p class=\"name\">form</p></div><div class=\"distinction\"><p class=\"name\">form</p></div></div></div>"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "items": [
+                        {
+                            "mime": "text/html",
+                            "value": [
+                                "<style> table, th, tr { text-align: left; }</style><link rel=\"stylesheet\" type=\"text/css\" href=\"./style.css\"/><div class=\"context\"><div class=\"distinction\"><p class=\"name\">condensation</p><div class=\"distinction\"><p class=\"name\">form</p></div></div></div>"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "language": "typescript",
+            "source": [
+                "// Form of Cancelation [[]] = false\n// Take an expresion the inmediate space of the expression will be evaluated.\nconst cancelation: Distiction = (expression: Distiction) => {\n  const selectSpace = (space: Distiction, depth: Number | Boolean) => {\n    let selectedSpace = {}\n\n    if (Array.isArray(space)) {\n      if (space.length > 1) {\n        return false\n      }\n      selectedSpace = {...space[0]}\n    } else {\n      selectedSpace = {...space}\n    }\n\n    if (depth === 0) {\n      selectedSpace.space = {}\n    } else if (depth === 1) {\n      return selectedSpace.space // What is selected spacce is an array of a single element?\n    }\n\n    return selectedSpace\n  }\n\n  const space0 = selectSpace(expression.space, 0)\n  const space1 = selectSpace(expression.space, 1)\n  const evaluation = crossing(space0, space1);\n  console.log('evaluation', evaluation)\n\n  if (!evaluation) {\n    return {\n      space: evaluation,\n      name: expression.name\n    }\n  }\n\n  return expression\n}\n\n// This function cross is etremely important but has not been necesary until now\nconst cross = (form: Distiction, cross: Distiction) => {\n  let crossed = {...form};\n  crossed.space = {...cross};\n\n  return crossed\n}\n\nconst cancelationForm: Distiction = {\n  space: cross(form, form),\n  name: 'cancelation'\n}\n\ncancelation(cancelationForm)\ndraw(cancelationForm)\ndraw(cancelation(cancelationForm))\n"
             ],
             "outputs": [
                 {
@@ -54,7 +82,8 @@
                         {
                             "mime": "application/vnd.code.notebook.stdout",
                             "value": [
-                                "[{\"space\":{},\"name\":\"form\"}] [{\"space\":{},\"name\":\"form\"}]",
+                                "evaluation false",
+                                "evaluation false",
                                 ""
                             ]
                         }
@@ -65,7 +94,7 @@
                         {
                             "mime": "text/html",
                             "value": [
-                                "<style> table, th, tr { text-align: left; }</style><link rel=\"stylesheet\" type=\"text/css\" href=\"./style.css\"/><div class=\"context\"><div class=\"distinction\"><p class=\"name\">expression</p><div class=\"distinction\"><p class=\"name\">form</p></div><div class=\"distinction\"><p class=\"name\">form</p></div></div></div>"
+                                "<style> table, th, tr { text-align: left; }</style><link rel=\"stylesheet\" type=\"text/css\" href=\"./style.css\"/><div class=\"context\"><div class=\"distinction\"><p class=\"name\">cancelation</p><div class=\"distinction\"><p class=\"name\">form</p><div class=\"distinction\"><p class=\"name\">form</p></div></div></div></div>"
                             ]
                         }
                     ]
@@ -75,7 +104,7 @@
                         {
                             "mime": "text/html",
                             "value": [
-                                "<style> table, th, tr { text-align: left; }</style><link rel=\"stylesheet\" type=\"text/css\" href=\"./style.css\"/><div class=\"context\"><div class=\"distinction\"><p class=\"name\">expression</p><div class=\"distinction\"><p class=\"name\">form</p></div></div></div>"
+                                "<style> table, th, tr { text-align: left; }</style><link rel=\"stylesheet\" type=\"text/css\" href=\"./style.css\"/><div class=\"context\"><div class=\"distinction\"><p class=\"name\">cancelation</p></div></div>"
                             ]
                         }
                     ]
@@ -85,28 +114,9 @@
         {
             "language": "typescript",
             "source": [
-                "// Form of Cancelation [[]] = false\n// Take an expresion the inmediate space of the expression will be evaluated.\n"
+                ""
             ],
             "outputs": []
-        },
-        {
-            "language": "typescript",
-            "source": [
-                "\n/*\nconst expression = (e: Expression) => {\n  let marks = {};\n  let space = 0;\n  let id = 0;\n  for (let i = e.length - 1; i >= 0; i--) {\n    if (e[i] === ']') {\n      id = i;\n      space++;\n      marks[id] = { space: space };\n    }\n    else if (e[i] === '[') {\n      id = 0;\n      space--;\n    }\n    else {\n      marks[id] = { ... {value: e[i]} };\n    }\n  }\n\n  return marks;\n}\n\nconsole.log(expression(\"[[b]a]\"))\n*/\n/* The following cannons use a single space with a comma to separate two marks\nconst condensation = (m: Mark, n: Mark) => {\n  return calling(m, n);\n}\n\nconst confirmation = (m: Mark) => {\n  return [m, m];\n}\n\nconst cancellation = (m: Mark, n: Mark) => {\n  return crossing(m, n);\n}\n\nconst compensation = (m: Mark) => {\n  return [crossing(m, m), m];\n}\nconsole.log('depth', depth([1, 2, 3, [1, [12, [[]]]]]))\nconsole.log('condensation', condensation(1, 1)) // [1, 2, 3]\nconsole.log('confirmation', confirmation(1)) // [1, 2, 3]\nconsole.log('cancellation', cancellation([], [])) // false\nconsole.log('compensation', compensation(1)) */"
-            ],
-            "outputs": [
-                {
-                    "items": [
-                        {
-                            "mime": "application/vnd.code.notebook.stdout",
-                            "value": [
-                                "{ '3': { value: 'b' }, '5': { value: 'a' } }",
-                                ""
-                            ]
-                        }
-                    ]
-                }
-            ]
         }
     ]
 }
