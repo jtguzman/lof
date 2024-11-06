@@ -205,9 +205,50 @@
         {
             "language": "typescript",
             "source": [
-                "// The Concept of Calculation\n// Step ⇀ \n\ntype Step = {\n  expression: Distiction,\n  operation: Function\n  result: Distiction\n}\n\n"
+                "// The Concept of Calculation\n// Step ⇀ \n\ntype Step = {\n  expression: Distiction,\n  operation: Function\n  result: Distiction\n  name: string\n}\n\nconst step: Step = (expression: Distiction, operation: Function, options: Distiction) => {\n  return {\n    expression,\n    operation,\n    result: operation(expression, {...options}),\n    name: operation.name\n  }\n}\n\nconst drawStep = (step: Step) => {\n  const output = pug.renderFile('./views/step.pug', {...step});\n  display.html(output)\n}\n\nconst condensationStep: Step = step(condensationForm, condensation)\nconst confirmationStep: Step = step(confirmationForm, confirmation)\nconst cancelationStep: Step = step(cancelationForm, cancelation)\nconst compensationStep: Step = step(compesationForm, compensation, form)\n\ndrawStep(condensationStep)\ndrawStep(confirmationStep)\ndrawStep(cancelationStep)\ndrawStep(compensationStep)"
             ],
-            "outputs": []
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "text/html",
+                            "value": [
+                                "<style> table, th, tr { text-align: left; }</style><link rel=\"stylesheet\" type=\"text/css\" href=\"./style.css\"/><div class=\"context\"><div class=\"distinction\"><p class=\"name\">condensation</p><div class=\"distinction\"><p class=\"name\">form</p></div><div class=\"distinction\"><p class=\"name\">form</p></div></div><h3 class=\"operator\">&rharu;</h3><div class=\"distinction\"><p class=\"name\">condensation</p><div class=\"distinction\"><p class=\"name\">form</p></div></div><p class=\"step\">condensation</p></div>"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "items": [
+                        {
+                            "mime": "text/html",
+                            "value": [
+                                "<style> table, th, tr { text-align: left; }</style><link rel=\"stylesheet\" type=\"text/css\" href=\"./style.css\"/><div class=\"context\"><div class=\"distinction\"><p class=\"name\">confirmation</p><div class=\"distinction\"><p class=\"name\">form</p></div></div><h3 class=\"operator\">&rharu;</h3><div class=\"distinction\"><p class=\"name\">confirmation</p><div class=\"distinction\"><p class=\"name\">form</p></div><div class=\"distinction\"><p class=\"name\">form</p></div></div><p class=\"step\">confirmation</p></div>"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "items": [
+                        {
+                            "mime": "text/html",
+                            "value": [
+                                "<style> table, th, tr { text-align: left; }</style><link rel=\"stylesheet\" type=\"text/css\" href=\"./style.css\"/><div class=\"context\"><div class=\"distinction\"><p class=\"name\">cancelation</p><div class=\"distinction\"><p class=\"name\">form</p><div class=\"distinction\"><p class=\"name\">form</p></div></div></div><h3 class=\"operator\">&rharu;</h3><div class=\"distinction\"><p class=\"name\">cancelation</p></div><p class=\"step\">cancelation</p></div>"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "items": [
+                        {
+                            "mime": "text/html",
+                            "value": [
+                                "<style> table, th, tr { text-align: left; }</style><link rel=\"stylesheet\" type=\"text/css\" href=\"./style.css\"/><div class=\"context\"><div class=\"distinction\"><p class=\"name\">compensation</p></div><h3 class=\"operator\">&rharu;</h3><div class=\"distinction\"><p class=\"name\">compensation</p><div class=\"distinction\"><p class=\"name\">form</p><div class=\"distinction\"><p class=\"name\">form</p></div></div></div><p class=\"step\">compensation</p></div>"
+                            ]
+                        }
+                    ]
+                }
+            ]
         }
     ]
 }
