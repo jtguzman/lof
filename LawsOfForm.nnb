@@ -10,7 +10,7 @@
         {
             "language": "typescript",
             "source": [
-                "// 2. Forms Taken Out of the Form\n\n// Draw a distinction\nconst { display } = require('node-kernel');\nconst pug = require('pug');\n\n// The Form\nconst form: Distiction = {\n  space: {},\n  name: 'form'\n}\n\nlet output = pug.renderFile('./distinction.pug', {...form});\ndisplay.html(output);"
+                "// 2. Forms Taken Out of the Form\n\n// Draw a distinction\nconst { display } = require('node-kernel');\nconst pug = require('pug');\n\n// The Form\nconst form: Distiction = {\n  space: {},\n  name: 'form'\n}\n\nlet output = pug.renderFile('./views/expression.pug', {...form});\ndisplay.html(output);"
             ],
             "outputs": [
                 {
@@ -28,7 +28,7 @@
         {
             "language": "typescript",
             "source": [
-                "// Expression\nconst expression: Distiction = {\n  space: [{...form}],\n  name: 'expression'\n}\n\nconst draw = (expression: Distiction) => {\n  const output = pug.renderFile('./distinction.pug', {...expression});\n  display.html(output)\n}\n\ndraw(expression)"
+                "// Expression\nconst expression: Distiction = {\n  space: [{...form}],\n  name: 'expression'\n}\n\nconst draw = (expression: Distiction) => {\n  const output = pug.renderFile('./views/expression.pug', {...expression});\n  display.html(output)\n}\n\ndraw(expression)"
             ],
             "outputs": [
                 {
@@ -74,21 +74,9 @@
         {
             "language": "typescript",
             "source": [
-                "// Form of Cancelation [[]] = false\n// Take an expresion the inmediate space of the expression will be evaluated.\nconst cancelation: Distiction = (expression: Distiction) => {\n  const selectSpace = (space: Distiction, depth: Number | Boolean) => {\n    let selectedSpace = {}\n\n    if (Array.isArray(space)) {\n      if (space.length > 1) {\n        return false\n      }\n      selectedSpace = {...space[0]}\n    } else {\n      selectedSpace = {...space}\n    }\n\n    if (depth === 0) {\n      selectedSpace.space = {}\n    } else if (depth === 1) {\n      return selectedSpace.space // What is selected spacce is an array of a single element?\n    }\n\n    return selectedSpace\n  }\n\n  const space0 = selectSpace(expression.space, 0)\n  const space1 = selectSpace(expression.space, 1)\n  const evaluation = crossing(space0, space1);\n  console.log('evaluation', evaluation)\n\n  if (!evaluation) {\n    return {\n      space: evaluation,\n      name: expression.name\n    }\n  }\n\n  return expression\n}\n\n// This function cross is etremely important but has not been necesary until now\nconst cross = (form: Distiction, cross: Distiction) => {\n  let crossed = {...form};\n  crossed.space = {...cross};\n\n  return crossed\n}\n\nconst cancelationForm: Distiction = {\n  space: cross(form, form),\n  name: 'cancelation'\n}\n\ncancelation(cancelationForm)\ndraw(cancelationForm)\ndraw(cancelation(cancelationForm))\n"
+                "// Form of Cancelation [[]] = false\n// Take an expresion the inmediate space of the expression will be evaluated.\nconst cancelation: Distiction = (expression: Distiction) => {\n  const selectSpace = (space: Distiction, depth: Number | Boolean) => {\n    let selectedSpace = {}\n\n    if (Array.isArray(space)) {\n      if (space.length > 1) {\n        return false\n      }\n      selectedSpace = {...space[0]}\n    } else {\n      selectedSpace = {...space}\n    }\n\n    if (depth === 0) {\n      selectedSpace.space = {}\n    } else if (depth === 1) {\n      return selectedSpace.space // What is selected spacce is an array of a single element?\n    }\n\n    return selectedSpace\n  }\n\n  const space0 = selectSpace(expression.space, 0)\n  const space1 = selectSpace(expression.space, 1)\n  const evaluation = crossing(space0, space1);\n\n  if (!evaluation) {\n    return {\n      space: evaluation,\n      name: expression.name\n    }\n  }\n\n  return expression\n}\n\n// This function cross is etremely important\n// Its not the same as the Law of Crossing, but an operation\nconst cross = (form: Distiction, cross: Distiction) => {\n  let crossed = {...form};\n  crossed.space = {...cross};\n\n  return crossed\n}\n\nconst cancelationForm: Distiction = {\n  space: cross(form, form),\n  name: 'cancelation'\n}\n\ncancelation(cancelationForm)\ndraw(cancelationForm)\ndraw(cancelation(cancelationForm))\n"
             ],
             "outputs": [
-                {
-                    "items": [
-                        {
-                            "mime": "application/vnd.code.notebook.stdout",
-                            "value": [
-                                "evaluation false",
-                                "evaluation false",
-                                ""
-                            ]
-                        }
-                    ]
-                },
                 {
                     "items": [
                         {
@@ -114,9 +102,20 @@
         {
             "language": "typescript",
             "source": [
-                ""
+                "// Equation\nconst equation: Distiction = {\n  space: [{...expression}, {...expression}],\n  name: 'equation'\n}\n\nconst drawEquation = (expression: Distiction) => {\n  if (Array.isArray(expression.space) && expression.space.length === 2) {\n  const output = pug.renderFile('./views/equation.pug', {...expression});\n  return display.html(output)\n  }\n  \n  return new Error('Invalid expression. Equations must have two expressions.')\n}\n\ndrawEquation(equation)"
             ],
-            "outputs": []
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "text/html",
+                            "value": [
+                                "<style> table, th, tr { text-align: left; }</style><link rel=\"stylesheet\" type=\"text/css\" href=\"./style.css\"/><div class=\"context\"><div class=\"distinction\"><p class=\"name\">equation</p><div class=\"distinction\"><p class=\"name\">expression</p><div class=\"distinction\"><p class=\"name\">form</p></div></div></div><h1>=</h1><div class=\"distinction\"><p class=\"name\">equation</p><div class=\"distinction\"><p class=\"name\">expression</p><div class=\"distinction\"><p class=\"name\">form</p></div></div></div></div>"
+                            ]
+                        }
+                    ]
+                }
+            ]
         }
     ]
 }

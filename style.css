@@ -15,3 +15,8 @@
   align-self: flex-start;
   padding: 0 5px 0 0;
 }
+
+.operator {
+  align-self: center;
+  padding: 0 10px 0 10px;
+}
