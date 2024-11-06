@@ -1,0 +1,17 @@
+.context {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: stretch;
+}
+
+.distinction {
+  display: flex;
+  flex-direction: row-reverse;
+  border-top: 1px solid #e1e1e1;
+  border-right: 1px solid #e1e1e1;
+  margin: 5px 5px 0 0;
+}
+.name {
+  align-self: flex-start;
+  padding: 0 5px 0 0;
+}

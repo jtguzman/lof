@@ -1,0 +1,22 @@
+link(rel='stylesheet', type='text/css', href='./style.css')
+
+mixin distinctionA(name, space)
+  div.distinction
+    p.name #{name}
+    if Array.isArray(space)
+      each val in space
+        +distinctionB(val.name, val.space)
+    else if Object.keys(space).length > 0
+      +distinctionB(space.name, space.space)
+
+mixin distinctionB(name, space)
+  div.distinction
+    p.name #{name}
+    if Array.isArray(space)
+      each val in space
+        +distinctionA(val.name, val.space)
+    else if Object.keys(space).length > 0
+      +distinctionA(space.name, space.space)
+
+.context
+  +distinctionA(name, space)

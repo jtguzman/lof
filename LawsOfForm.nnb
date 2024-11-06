@@ -1,0 +1,105 @@
+{
+    "cells": [
+        {
+            "language": "typescript",
+            "source": [
+                "// 1. The Form\n\n// Distinction is perfect continence\ntype Distiction = {\n  space: Distiction | Array<Distiction>,\n  name: string\n}\n\n// Axiom 1. Law of calling\nconst calling: any = (m: any, n: any) => {\n  if (m.toString() === n.toString()) return m;\n  return false\n}\n\n// Axiom 2. Law of crossing\nconst crossing: any = (m: any, n: any) => {\n  if (m.toString() === n.toString()) return false;\n  return m\n}"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "typescript",
+            "source": [
+                "// 2. Forms Taken Out of the Form\n\n// Draw a distinction\nconst { display } = require('node-kernel');\nconst pug = require('pug');\n\n// The Form\nconst form: Distiction = {\n  space: {},\n  name: 'form'\n}\n\nlet output = pug.renderFile('./distinction.pug', {...form});\ndisplay.html(output);"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "text/html",
+                            "value": [
+                                "<style> table, th, tr { text-align: left; }</style><link rel=\"stylesheet\" type=\"text/css\" href=\"./style.css\"/><div class=\"distinction\"><p class=\"name\">form - 0</p></div>"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "language": "typescript",
+            "source": [
+                "// Expression\nconst expression: Distiction = {\n  space: [{...form}],\n  name: 'expression'\n}\n\nconst draw = (expression: Distiction) => {\n  const output = pug.renderFile('./distinction.pug', {...expression});\n  display.html(output)\n}\n\ndraw(expression)"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "text/html",
+                            "value": [
+                                "<style> table, th, tr { text-align: left; }</style><link rel=\"stylesheet\" type=\"text/css\" href=\"./style.css\"/><div class=\"context\"><div class=\"distinction\"><p class=\"name\">expression</p><div class=\"distinction\"><p class=\"name\">form</p></div></div></div>"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "language": "typescript",
+            "source": [
+                "// Form of Condensation ]] = ]\n// Take an expresion the inmediate space og the expression will be evaluated.\nconst condensation = (expression: Distiction) => {\n  if (Array.isArray(expression.space) && (expression.space.length % 2 === 0)) {\n    const half = Math.floor(expression.space.length / 2)\n    let left = expression.space.slice(0, half);\n    let right = expression.space.slice(half, expression.space.length);\n    \n    const equivalence = calling(left, right);\n    if (equivalence) {\n      return {\n        space: equivalence,\n        name: expression.name\n      }\n    }\n  }\n  return false;\n}\n\nconst expressionToCondensate: Distiction = {\n  space: [{ ...form }, { ...form }],\n  name: 'expression'\n}\n\ndraw({...expressionToCondensate})\ndraw(condensation(expressionToCondensate))\n//draw(result)\n\n\n\n\n"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "application/vnd.code.notebook.stdout",
+                            "value": [
+                                "[ { space: {}, name: 'form' } ]",
+                                ""
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "items": [
+                        {
+                            "mime": "text/html",
+                            "value": [
+                                "<style> table, th, tr { text-align: left; }</style><link rel=\"stylesheet\" type=\"text/css\" href=\"./style.css\"/><div class=\"context\"><div class=\"distinction\"><p class=\"name\">expression</p><div class=\"distinction\"><p class=\"name\">form</p></div><div class=\"distinction\"><p class=\"name\">form</p></div></div></div>"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "items": [
+                        {
+                            "mime": "text/html",
+                            "value": [
+                                "<style> table, th, tr { text-align: left; }</style><link rel=\"stylesheet\" type=\"text/css\" href=\"./style.css\"/><div class=\"context\"><div class=\"distinction\"><p class=\"name\">expression</p><div class=\"distinction\"><p class=\"name\">form</p></div></div></div>"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "language": "typescript",
+            "source": [
+                "\n/*\nconst expression = (e: Expression) => {\n  let marks = {};\n  let space = 0;\n  let id = 0;\n  for (let i = e.length - 1; i >= 0; i--) {\n    if (e[i] === ']') {\n      id = i;\n      space++;\n      marks[id] = { space: space };\n    }\n    else if (e[i] === '[') {\n      id = 0;\n      space--;\n    }\n    else {\n      marks[id] = { ... {value: e[i]} };\n    }\n  }\n\n  return marks;\n}\n\nconsole.log(expression(\"[[b]a]\"))\n*/\n/* The following cannons use a single space with a comma to separate two marks\nconst condensation = (m: Mark, n: Mark) => {\n  return calling(m, n);\n}\n\nconst confirmation = (m: Mark) => {\n  return [m, m];\n}\n\nconst cancellation = (m: Mark, n: Mark) => {\n  return crossing(m, n);\n}\n\nconst compensation = (m: Mark) => {\n  return [crossing(m, m), m];\n}\nconsole.log('depth', depth([1, 2, 3, [1, [12, [[]]]]]))\nconsole.log('condensation', condensation(1, 1)) // [1, 2, 3]\nconsole.log('confirmation', confirmation(1)) // [1, 2, 3]\nconsole.log('cancellation', cancellation([], [])) // false\nconsole.log('compensation', compensation(1)) */"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "application/vnd.code.notebook.stdout",
+                            "value": [
+                                "{ '3': { value: 'b' }, '5': { value: 'a' } }",
+                                ""
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
