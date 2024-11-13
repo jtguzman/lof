@@ -4,21 +4,21 @@
 // 1. The Form
 
 // Distinction is perfect continence
-type Distinction = {
-  space: Space,
+type DistinctionType = {
+  space: SpaceType,
   name?: string
 }
 
-type Space = Distinction | Distinction[] | []
+type SpaceType = DistinctionType | DistinctionType[] | []
 
 // Axiom 1. Law of calling
-const calling = (m: Space, n: Space): any => {
+const calling = (m: SpaceType, n: SpaceType): any => {
   if (JSON.stringify(m) === JSON.stringify(n)) return m;
   return []
 }
 
 // Axiom 2. Law of crossing
-const crossing = (m: Space, n: Space): any => {
+const crossing = (m: SpaceType, n: SpaceType): any => {
   if (JSON.stringify(m) === JSON.stringify(n)) return [];
   return m
 }
@@ -26,7 +26,7 @@ const crossing = (m: Space, n: Space): any => {
 
 // Construction of the Form - As interpreted by JT Guzman
 // Mark operation
-const mark = (name: string): Distinction => {
+const mark = (name: string): DistinctionType => {
   return {
     space: [],
     name
@@ -34,7 +34,7 @@ const mark = (name: string): Distinction => {
 }
 
 // Cross operation
-const cross = (form: Distinction, cross: Distinction) => {
+const cross = (form: DistinctionType, cross: DistinctionType) => {
   let crossed = {...form};
   crossed.space = {...cross};
 
@@ -42,19 +42,19 @@ const cross = (form: Distinction, cross: Distinction) => {
 }
 
 // Instance of a Form
-// const form: Distinction = {
+// const form: DistinctionType = {
 //   space: [],
 //   name: 'form'
 // }
 
 // Instance of an Expression
-// const expression: Distinction = {
+// const expression: DistinctionType = {
 //   space: [{...form}],
 //   name: 'expression'
 // }
 
 // Form of Condensation [][] = []
-const condensation = (expression: Distinction): Distinction => {
+const condensation = (expression: DistinctionType): DistinctionType => {
   if (Array.isArray(expression.space) && (expression.space.length % 2 === 0)) {
     const half = Math.floor(expression.space.length / 2)
     let left = expression.space.slice(0, half);
@@ -71,15 +71,15 @@ const condensation = (expression: Distinction): Distinction => {
 }
 
 // Instance of a Condensation candidate
-// const condensationForm: Distinction = {
+// const condensationForm: DistinctionType = {
 //   space: [{ ...form }, { ...form }],
 //   name: 'condensation'
 // }
 
 // Form of Confirmation [] = [][]
 // Form of Confirmation [] = [][]
-const confirmation = (expression: Distinction): Distinction => {
-  const space = expression.space as Distinction;
+const confirmation = (expression: DistinctionType): DistinctionType => {
+  const space = expression.space as DistinctionType;
   return {
     space: [space, space],
     name: expression.name
@@ -88,14 +88,14 @@ const confirmation = (expression: Distinction): Distinction => {
 
 // Instance of a Confirmation candidate
 // 
-// const confirmationForm: Distinction = {
+// const confirmationForm: DistinctionType = {
 //   space: form,
 //   name: 'confirmation'
 // }
 
 // Form of Cancelation [[]] = false
-const cancelation = (expression: Distinction): Distinction => {
-  const selectSpace = (space: Space, depth: Number | Boolean) => {
+const cancelation = (expression: DistinctionType): DistinctionType => {
+  const selectSpace = (space: SpaceType, depth: Number | Boolean) => {
     let selectedSpace = []
 
     if (Array.isArray(space)) {
@@ -131,13 +131,13 @@ const cancelation = (expression: Distinction): Distinction => {
 }
 
 // Instance of a Cancelation candidate
-// const cancelationForm: Distinction = {
+// const cancelationForm: DistinctionType = {
 //   space: cross(form, form),
 //   name: 'cancelation'
 // }
 
 // Form of Compensation  = [[]]
-const compensation = (expression: Distinction, form: Distinction): Distinction => {
+const compensation = (expression: DistinctionType, form: DistinctionType): DistinctionType => {
   if (!form) {
     form = {...expression}
   }
@@ -154,13 +154,13 @@ return {
 }
 
 // Instance of a Compensation candidate
-// const compesationForm: Distinction = {
+// const compesationForm: DistinctionType = {
 //   space: [],
 //   name: 'compensation'
 // }
 
 // Depth function
-const depth = (expression: Distinction) => {
+const depth = (expression: DistinctionType) => {
   let level = 0;
   let current = expression;
   while (current.space) { // Shallowest space
@@ -168,7 +168,7 @@ const depth = (expression: Distinction) => {
     if (Array.isArray(current.space) && current.space.length === 0) {
       break;
     }
-    current = current.space as Distinction; // Pervaded space 
+    current = current.space as DistinctionType; // Pervaded space 
   }
 
   if (Array.isArray(current)) {
@@ -183,22 +183,22 @@ const depth = (expression: Distinction) => {
 }
 
 // Instance of a Form with complex depth
-// const formWithComplexDepth: Distinction = {
+// const formWithComplexDepth: DistinctionType = {
 //   space: [{...form, ...cross(form, cross(form, form))}, {...form}, {...form, ...cross(form, form)}],
 //   name: 'formWithComplexDepth'
 // }
 
 // The Concept of Calculation
 // Step ⇀ 
-type Step = {
-  expression: Distinction,
-  operation: (expression: Distinction, options: Distinction) => Distinction,
-  result: Distinction,
+type StepType = {
+  expression: DistinctionType,
+  operation: (expression: DistinctionType, options: DistinctionType) => DistinctionType,
+  result: DistinctionType,
   name: string
 }
 
 // Instance of a Step
-// const step = (expression: Distinction, operation: (expression: Distinction, options: Distinction) => Distinction, options: Distinction): Step => {
+// const step = (expression: DistinctionType, operation: (expression: DistinctionType, options: DistinctionType) => DistinctionType, options: DistinctionType): Step => {
 //   return {
 //     expression,
 //     operation,
@@ -208,9 +208,9 @@ type Step = {
 // }
 
 export type {
-  Distinction,
-  Space,
-  Step,
+  DistinctionType,
+  SpaceType,
+  StepType,
 }
 
 export default {
