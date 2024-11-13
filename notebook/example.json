@@ -1,0 +1,30 @@
+{
+  "expression": {
+    "space": [
+      {
+        "space": {},
+        "name": "form"
+      },
+      {
+        "space": {},
+        "name": "form"
+      }
+    ],
+    "name": "condensation"
+  },
+  "steps": [
+    {
+      "expression": {
+        "space": {
+          "space": {
+            "space": {},
+            "name": "form"
+          },
+          "name": "form"
+        },
+        "name": "cancelation"
+      },
+      "name": "cancelation"
+    }
+  ]
+}

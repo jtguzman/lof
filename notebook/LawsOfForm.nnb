@@ -3,14 +3,14 @@
         {
             "language": "typescript",
             "source": [
-                "// 1. The Form\n\n// Distinction is perfect continence\ntype Distiction = {\n  space: Distiction | Array<Distiction>,\n  name: string\n}\n\n// Axiom 1. Law of calling\nconst calling: any = (m: any, n: any) => {\n  if (JSON.stringify(m) === JSON.stringify(n)) return m;\n  return false\n}\n\n// Axiom 2. Law of crossing\nconst crossing: any = (m: any, n: any) => {\n  if (JSON.stringify(m) === JSON.stringify(n)) return false;\n  return m\n}"
+                "// 1. The Form\n\n// Distinction is perfect continence\ntype Distinction = {\n  space: Space,\n  name?: string\n}\n\ntype Space = Distinction | Distinction[] | []\n\n// Axiom 1. Law of calling\nconst calling = (m: Space, n: Space): any => {\n  if (JSON.stringify(m) === JSON.stringify(n)) return m;\n  return []\n}\n\n// Axiom 2. Law of crossing\nconst crossing = (m: Space, n: Space): any => {\n  if (JSON.stringify(m) === JSON.stringify(n)) return [];\n  return m\n}"
             ],
             "outputs": []
         },
         {
             "language": "typescript",
             "source": [
-                "// 2. Forms Taken Out of the Form\n\n// Draw a distinction\nconst { display } = require('node-kernel');\nconst pug = require('pug');\n\n// The Form\nconst form: Distiction = {\n  space: {},\n  name: 'form'\n}\n\nlet output = pug.renderFile('./views/expression.pug', {...form});\ndisplay.html(output);"
+                "// 2. Forms Taken Out of the Form\n\n// Draw a distinction\nconst { display } = require('node-kernel');\nconst pug = require('pug');\n\n// The Form\nconst form: Distiction = {\n  space: [],\n  name: 'form'\n}\n\n// The form should be indicated or selected.\n// const selectDistinction = (event) => {\n//   console.log('event', event)\n// }\n\n// Add selectDistinction to document object\n// this.selectDistinction = () => console.log('selectDistinction')\n\nconst draw = (expression: Distiction) => {\n  const compiled = pug.compileFile('./views/expression.pug', {...expression });\n  const output = compiled({ ...expression });\n  display.html(output)\n}\n\ndraw(form)"
             ],
             "outputs": [
                 {
@@ -28,7 +28,7 @@
         {
             "language": "typescript",
             "source": [
-                "// Expression\nconst expression: Distiction = {\n  space: [{...form}],\n  name: 'expression'\n}\n\nconst draw = (expression: Distiction) => {\n  const output = pug.renderFile('./views/expression.pug', {...expression});\n  display.html(output)\n}\n\ndraw(expression)"
+                "// Expression\nconst expression: Distiction = {\n  space: [{...form}],\n  name: 'expression'\n}\n\ndraw(expression)"
             ],
             "outputs": [
                 {
@@ -46,7 +46,7 @@
         {
             "language": "typescript",
             "source": [
-                "// Form of Condensation [][] = []\n// Take an expresion the inmediate space of the expression will be evaluated.\nconst condensation: Distinction = (expression: Distiction) => {\n  if (Array.isArray(expression.space) && (expression.space.length % 2 === 0)) {\n    const half = Math.floor(expression.space.length / 2)\n    let left = expression.space.slice(0, half);\n    let right = expression.space.slice(half, expression.space.length);\n    const evaluation = calling(left, right);\n    if (evaluation) {\n      return {\n        space: evaluation,\n        name: expression.name\n      }\n    }\n  }\n  return expression;\n}\n\nconst condensationForm: Distiction = {\n  space: [{ ...form }, { ...form }],\n  name: 'condensation'\n}\n\ndraw({...condensationForm})\ndraw(condensation(condensationForm))"
+                "// Form of Condensation [][] = []\n\nconst condensation = (expression: Distinction): Distinction => {\n  if (Array.isArray(expression.space) && (expression.space.length % 2 === 0)) {\n    const half = Math.floor(expression.space.length / 2)\n    let left = expression.space.slice(0, half);\n    let right = expression.space.slice(half, expression.space.length);\n    const evaluation = calling(left, right);\n    if (evaluation) {\n      return {\n        space: evaluation,\n        name: expression.name\n      }\n    }\n  }\n  return expression;\n}\n\nconst condensationForm: Distiction = {\n  space: [{ ...form }, { ...form }],\n  name: 'condensation'\n}\n\ndraw({...condensationForm})\ndraw(condensation(condensationForm))"
             ],
             "outputs": [
                 {
@@ -74,7 +74,7 @@
         {
             "language": "typescript",
             "source": [
-                "// Form of Confirmation [] = [][]\nconst confirmation: Distiction = (expression: Distiction) => {\n  return {\n    space: [expression.space, expression.space],\n    name: expression.name\n  }\n}\n\nconst confirmationForm: Distiction = {\n  space: form ,\n  name: 'confirmation'\n}\n\ndraw({...confirmationForm})\ndraw(confirmation(confirmationForm))"
+                "// Form of Confirmation [] = [][]\n\nconst confirmation = (expression: Distinction): Distinction => {\n  const space = expression.space as Distinction;\n  return {\n    space: [space, space],\n    name: expression.name\n  }\n}\n\nconst confirmationForm: Distiction = {\n  space: form ,\n  name: 'confirmation'\n}\n\ndraw({...confirmationForm})\ndraw(confirmation(confirmationForm))"
             ],
             "outputs": [
                 {
@@ -102,7 +102,35 @@
         {
             "language": "typescript",
             "source": [
-                "// Form of Cancelation [[]] = false\n// Take an expresion the inmediate space of the expression will be evaluated.\nconst cancelation: Distiction = (expression: Distiction) => {\n  const selectSpace = (space: Distiction, depth: Number | Boolean) => {\n    let selectedSpace = {}\n\n    if (Array.isArray(space)) {\n      if (space.length > 1) {\n        return false\n      }\n      selectedSpace = {...space[0]}\n    } else {\n      selectedSpace = {...space}\n    }\n\n    if (depth === 0) {\n      selectedSpace.space = {}\n    } else if (depth === 1) {\n      return selectedSpace.space // What is selected spacce is an array of a single element?\n    }\n\n    return selectedSpace\n  }\n\n  const space0 = selectSpace(expression.space, 0)\n  const space1 = selectSpace(expression.space, 1)\n  const evaluation = crossing(space0, space1);\n\n  if (!evaluation) {\n    return {\n      space: evaluation,\n      name: expression.name\n    }\n  }\n\n  return expression\n}\n\n// This function cross is etremely important\n// Its not the same as the Law of Crossing, but an operation\nconst cross = (form: Distiction, cross: Distiction) => {\n  let crossed = {...form};\n  crossed.space = {...cross};\n\n  return crossed\n}\n\nconst cancelationForm: Distiction = {\n  space: cross(form, form),\n  name: 'cancelation'\n}\n\ncancelation(cancelationForm)\ndraw(cancelationForm)\ndraw(cancelation(cancelationForm))\n"
+                "// Form of Confirmation [] = [][]\n\nconst confirmation: Distiction = (expression: Distiction) => {\n  return {\n    space: [expression.space, expression.space],\n    name: expression.name\n  }\n}\n\nconst confirmationForm: Distiction = {\n  space: form ,\n  name: 'confirmation'\n}\n\ndraw({...confirmationForm})\ndraw(confirmation(confirmationForm))"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "text/html",
+                            "value": [
+                                "<style> table, th, tr { text-align: left; }</style><link rel=\"stylesheet\" type=\"text/css\" href=\"./style.css\"/><div class=\"context\"><div class=\"distinction\"><p class=\"name\">confirmation</p><div class=\"distinction\"><p class=\"name\">form</p></div></div></div>"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "items": [
+                        {
+                            "mime": "text/html",
+                            "value": [
+                                "<style> table, th, tr { text-align: left; }</style><link rel=\"stylesheet\" type=\"text/css\" href=\"./style.css\"/><div class=\"context\"><div class=\"distinction\"><p class=\"name\">confirmation</p><div class=\"distinction\"><p class=\"name\">form</p></div><div class=\"distinction\"><p class=\"name\">form</p></div></div></div>"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "language": "typescript",
+            "source": [
+                "// Form of Cancelation [[]] = false\nconst cancelation = (expression: Distinction): Distinction => {\n  const selectSpace = (space: Space, depth: Number | Boolean) => {\n    let selectedSpace = []\n\n    if (Array.isArray(space)) {\n      if (space.length > 1) {\n        return []\n      }\n      selectedSpace.push(space[0])\n    } else {\n      selectedSpace.push(space)\n    }\n\n    if (depth === 0) {\n      selectedSpace[0].space = []\n    } else if (depth === 1) {\n      return selectedSpace[0].space // What is selected spacce is an array of a single element?\n    }\n\n    return selectedSpace\n  }\n\n  const space0 = selectSpace(expression.space, 0)\n  const space1 = selectSpace(expression.space, 1)\n  const evaluation = crossing(space0, space1);\n\n  if (!evaluation) {\n    return {\n      space: evaluation,\n      name: expression.name\n    }\n  }\n\n  return expression\n}\n\n// This function cross is etremely important\n// Its not the same as the Law of Crossing, but an operation\nconst cross = (form: Distinction, cross: Distinction) => {\n  let crossed = {...form};\n  crossed.space = {...cross};\n\n  return crossed\n}\n\nconst cancelationForm: Distiction = {\n  space: cross(form, form),\n  name: 'cancelation'\n}\n\ndraw(cancelationForm)\ndraw(cancelation(cancelationForm))\n"
             ],
             "outputs": [
                 {
@@ -120,7 +148,7 @@
                         {
                             "mime": "text/html",
                             "value": [
-                                "<style> table, th, tr { text-align: left; }</style><link rel=\"stylesheet\" type=\"text/css\" href=\"./style.css\"/><div class=\"context\"></div>"
+                                "<style> table, th, tr { text-align: left; }</style><link rel=\"stylesheet\" type=\"text/css\" href=\"./style.css\"/><div class=\"context\"><div class=\"distinction\"><p class=\"name\">cancelation</p><div class=\"distinction\"><p class=\"name\">form</p></div></div></div>"
                             ]
                         }
                     ]
@@ -130,7 +158,7 @@
         {
             "language": "typescript",
             "source": [
-                "// Form of Compensation  = [[]]\nconst compensation = (expression: Distiction, form: Distiction = false) => {\n  if (!form) {\n    form = {...expression}\n  }\n  let compensatedSpace = []\n  if (Object.keys(expression.space).length === 0 || expression.space.length === 0) {\n    compensatedSpace = [].concat(cross(form, form))\n  } else {\n    compensatedSpace = [].concat(cross(form, form), expression.space)\n  }\nreturn {\n    space: compensatedSpace,\n    name: expression.name\n  }\n}\n\nconst compesationForm: Distiction = {\n  space: {},\n  name: 'compensation'\n}\n\ndraw(compesationForm)\ndraw(compensation(compesationForm, form))"
+                "// Form of Compensation  = [[]]\nconst compensation = (expression: Distinction, form: Distinction): Distinction => {\n  if (!form) {\n    form = {...expression}\n  }\n  let compensatedSpace = []\n  if (Object.keys(expression.space).length === 0 || (Array.isArray(expression.space) && expression.space.length === 0)) {\n    compensatedSpace = [cross(form, form)]\n  } else {\n    compensatedSpace = [cross(form, form)].concat(expression.space)\n  }\nreturn {\n    space: compensatedSpace,\n    name: expression.name\n  }\n}\n\nconst compesationForm: Distiction = {\n  space: {},\n  name: 'compensation'\n}\n\ndraw(compesationForm)\ndraw(compensation(compesationForm, form))"
             ],
             "outputs": [
                 {
@@ -158,7 +186,7 @@
         {
             "language": "typescript",
             "source": [
-                "// Equation\nconst equation: Distiction = {\n  space: [{...expression}, {...expression}],\n  name: 'equation'\n}\n\nconst drawEquation = (expression: Distiction) => {\n  if (Array.isArray(expression.space) && expression.space.length === 2) {\n  const output = pug.renderFile('./views/equation.pug', {...expression});\n  return display.html(output)\n  }\n  \n  return new Error('Invalid expression. Equations must have two expressions.')\n}\n\ndrawEquation(equation)"
+                "// Equation\nconst equation: Distiction = {\n  space: [{...expression}, {...expression}],\n  name: 'equation'\n}\n\nconst drawEquation = (expression: Distiction) => {\n  if (Array.isArray(expression.space) && expression.space.length === 2) {\n  const output = pug.renderFile('./views/equation.pug', {...expression});\n  return display.html(output)\n  }\n  \n  return new Error('Invalid expression. Equations space must have two expressions.')\n}\n\ndrawEquation(equation)"
             ],
             "outputs": [
                 {
@@ -176,7 +204,7 @@
         {
             "language": "typescript",
             "source": [
-                "// Depth\n// Iterate an expression and count how many levels of depth it has\nconst depth = (expression: Distiction) => {\n  let level = 0;\n  let current = expression;\n  while (current.space) { // Shallowest space\n    level++;\n    current = current.space; // Pervaded space \n  }\n\n  if (Array.isArray(current)) {\n    for (let i = 0; i < current.length; i++) {\n      if (depth(current[i]) >= level) { // Only add the deepest spaces\n        level += depth(current[i]);\n      }\n    }\n  }\n\n  return level\n}\n\nconst formWithComplexDpth: Distiction = {\n  space: [{...form, ...cross(form, cross(form, form))}, {...form}, {...form, ...cross(form, form)}],\n  name: 'formWithComplexDepth'\n}\n\nconsole.log('depth', depth(formWithComplexDpth))\ndraw(formWithComplexDpth)"
+                "// Depth\n// Iterate an expression and count how many levels of depth it has\n// Depth function\nconst depth = (expression: Distinction) => {\n  let level = 0;\n  let current = expression;\n  while (current.space) { // Shallowest space\n    level++;\n    if (Array.isArray(current.space) && current.space.length === 0) {\n      break;\n    }\n    current = current.space as Distinction; // Pervaded space \n  }\n\n  if (Array.isArray(current)) {\n    for (let i = 0; i < current.length; i++) {\n      if (depth(current[i]) >= level) { // Only add the deepest spaces\n        level += depth(current[i]);\n      }\n    }\n  }\n\n  return level\n}\n\nconst formWithComplexDepth: Distiction = {\n  space: [{...form, ...cross(form, cross(form, form))}, {...form}, {...form, ...cross(form, form)}],\n  name: 'formWithComplexDepth'\n}\n\nconsole.log('depth', depth(formWithComplexDepth))\ndraw(formWithComplexDepth)"
             ],
             "outputs": [
                 {
@@ -233,7 +261,7 @@
                         {
                             "mime": "text/html",
                             "value": [
-                                "<style> table, th, tr { text-align: left; }</style><link rel=\"stylesheet\" type=\"text/css\" href=\"./style.css\"/><div class=\"context\"><div class=\"distinction\"><p class=\"name\">cancelation</p><div class=\"distinction\"><p class=\"name\">form</p><div class=\"distinction\"><p class=\"name\">form</p></div></div></div><h3 class=\"operator\">&rharu;</h3><p class=\"step\">cancelation</p></div>"
+                                "<style> table, th, tr { text-align: left; }</style><link rel=\"stylesheet\" type=\"text/css\" href=\"./style.css\"/><div class=\"context\"><div class=\"distinction\"><p class=\"name\">cancelation</p><div class=\"distinction\"><p class=\"name\">form</p></div></div><h3 class=\"operator\">&rharu;</h3><div class=\"distinction\"><p class=\"name\">cancelation</p><div class=\"distinction\"><p class=\"name\">form</p></div></div><p class=\"step\">cancelation</p></div>"
                             ]
                         }
                     ]
@@ -253,7 +281,7 @@
         {
             "language": "typescript",
             "source": [
-                "// Calculus\ntype Calculus = {\n  expression: Distiction\n  steps: Array<Step>,\n  result: Distiction\n}\n\nconst calculus: Calculus = (expression: Distiction, operations: Array<Function>) => {\n  let calculusSteps: Step[] = []\n  for (let i = 0; i < operations.length; i++) {\n    const operation = operations[i];\n    if (i === 0) {\n      calculusSteps.push(step(expression, operation))\n    } else {\n      calculusSteps.push(step(calculusSteps[i - 1].result(), operation))\n    }\n  }\n\n  return {\n    expression,\n    steps: calculusSteps,\n    result: calculusSteps[calculusSteps.length - 1].result()\n  }\n\n}\n\nconst calculatedSteps = calculus(condensationForm, [condensation, condensation, confirmation, cancelation, compensation])\ndrawStep(calculatedSteps.steps)"
+                "// Calculus\ntype Calculus = {\n  name: string\n  steps: Array<Step>\n}\n\n// Select expression.\n// When inditating a Distinction, select the space of the Distinction.\n// When indicating it again select the Distinction itself.\n\n\ndraw(form)\n"
             ],
             "outputs": [
                 {
@@ -261,47 +289,7 @@
                         {
                             "mime": "text/html",
                             "value": [
-                                "<style> table, th, tr { text-align: left; }</style><link rel=\"stylesheet\" type=\"text/css\" href=\"./style.css\"/><div class=\"context\"><div class=\"distinction\"><p class=\"name\">condensation</p><div class=\"distinction\"><p class=\"name\">form</p></div><div class=\"distinction\"><p class=\"name\">form</p></div></div><h3 class=\"operator\">&rharu;</h3><div class=\"distinction\"><p class=\"name\">condensation</p><div class=\"distinction\"><p class=\"name\">form</p></div></div><p class=\"step\">condensation</p></div>"
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "items": [
-                        {
-                            "mime": "text/html",
-                            "value": [
-                                "<style> table, th, tr { text-align: left; }</style><link rel=\"stylesheet\" type=\"text/css\" href=\"./style.css\"/><div class=\"context\"><div class=\"distinction\"><p class=\"name\">condensation</p><div class=\"distinction\"><p class=\"name\">form</p></div></div><h3 class=\"operator\">&rharu;</h3><div class=\"distinction\"><p class=\"name\">condensation</p><div class=\"distinction\"><p class=\"name\">form</p></div></div><p class=\"step\">condensation</p></div>"
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "items": [
-                        {
-                            "mime": "text/html",
-                            "value": [
-                                "<style> table, th, tr { text-align: left; }</style><link rel=\"stylesheet\" type=\"text/css\" href=\"./style.css\"/><div class=\"context\"><div class=\"distinction\"><p class=\"name\">condensation</p><div class=\"distinction\"><p class=\"name\">form</p></div></div><h3 class=\"operator\">&rharu;</h3><div class=\"distinction\"><p class=\"name\">condensation</p></div><p class=\"step\">confirmation</p></div>"
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "items": [
-                        {
-                            "mime": "text/html",
-                            "value": [
-                                "<style> table, th, tr { text-align: left; }</style><link rel=\"stylesheet\" type=\"text/css\" href=\"./style.css\"/><div class=\"context\"><div class=\"distinction\"><p class=\"name\">condensation</p></div><h3 class=\"operator\">&rharu;</h3><p class=\"step\">cancelation</p></div>"
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "items": [
-                        {
-                            "mime": "text/html",
-                            "value": [
-                                "<style> table, th, tr { text-align: left; }</style><link rel=\"stylesheet\" type=\"text/css\" href=\"./style.css\"/><div class=\"context\"><h3 class=\"operator\">&rharu;</h3><div class=\"distinction\"><p class=\"name\">condensation</p><div class=\"distinction\"><p class=\"name\"></p></div></div><p class=\"step\">compensation</p></div>"
+                                "<style> table, th, tr { text-align: left; }</style><link rel=\"stylesheet\" type=\"text/css\" href=\"./style.css\"/><div class=\"context\"><div class=\"distinction\"><p class=\"name\">form</p></div></div>"
                             ]
                         }
                     ]
