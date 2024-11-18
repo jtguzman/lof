@@ -5,8 +5,9 @@
 
 // Distinction is perfect continence
 type DistinctionType = {
-  space: SpaceType,
+  space: SpaceType
   name?: string
+  selected?: boolean
 }
 
 type SpaceType = DistinctionType | DistinctionType[] | []
@@ -192,9 +193,9 @@ const depth = (expression: DistinctionType) => {
 // Step ⇀ 
 type StepType = {
   expression: DistinctionType,
-  operation: (expression: DistinctionType, options: DistinctionType) => DistinctionType,
-  result: DistinctionType,
-  name: string
+  operation?: Function,
+  result?: DistinctionType,
+  name?: string
 }
 
 // Instance of a Step

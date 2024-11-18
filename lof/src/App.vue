@@ -1,10 +1,6 @@
 <script setup lang="ts">
 import LoF from '@/utils/lof'
-import Distinction from './components/Distinction.vue'
-import Step from './components/Step.vue'
-
-let expression = LoF.mark('expression')
-//expression = LoF.cross(expression, expression)
+import Calculator from './components/Calculator.vue';
 
 </script>
 
@@ -13,9 +9,8 @@ let expression = LoF.mark('expression')
   #state
     h3 State
   #calculator
-    h3 Calc
-    Distinction(:expression="expression")
-    Step(:expression="expression")
+    Calculator
+    
 </template>
 
 <style scoped>
