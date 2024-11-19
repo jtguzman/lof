@@ -14,19 +14,24 @@ const props = defineProps({
 
 const emits = defineEmits(['distinction-selected', 'distinction-unselected'])
 
-const select = (e: DistinctionType) => {
-    e.selected = !e.selected
-    if (e.selected) {
-      emits('distinction-selected', e)
+const select = (event: Event, expr: DistinctionType) => {
+  event.stopPropagation()
+  console.log('expr', expr)
+
+  expr.selected = !expr.selected
+  if (expr.selected) {
+      emits('distinction-selected', expr)
     } else {
-      emits('distinction-unselected', e)
+      emits('distinction-unselected', expr)
     }
 }
 
 </script>
 
 <template lang="pug">
-.distinction(@click="select(expression)" :class="{ selected: expression.selected }")
+.distinction(
+  @click="select($event, expression)"
+  :class="{ selected: expression.selected }")
   .name {{ expression?.name || '&nbsp;' }}
   .space(v-if="Array.isArray(expression?.space)")
     Distinction(v-for="e in expression?.space" :key="e.name" :expression="e")

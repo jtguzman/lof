@@ -36,13 +36,13 @@ const execute = () => {
 // Handles distinction selection
 const selectedExpression = ref({} as DistinctionType)
 
-const distinctionSelected = (e: DistinctionType) => {
-  selectedExpression.value = e
+const distinctionSelected = (expr: DistinctionType) => {
+  selectedExpression.value = expr
 }
 
-const distinctionUnselected = (e: DistinctionType) => {
-  selectedExpression.value = {} as DistinctionType
-}
+// const distinctionUnselected = (expr: DistinctionType) => {
+//   selectedExpression.value = {} as DistinctionType
+// }
 
 const newStep = () => {
   emits('new-step', step.value.result)
@@ -66,6 +66,8 @@ const newStep = () => {
   .execute(v-if="step.operation")
     button(@click="execute()") Execute
     button(v-if="step?.result" @click="newStep()") Next
+
+pre {{ selectedExpression }}
 
 </template>
 
