@@ -29,7 +29,23 @@ watch(() => props.operation, (newValue) => {
 
 const execute = () => {
   if (step.value.operation && selectedExpression.value) {
-    step.value.result = step.value.operation(step.value.expression, selectedExpression.value)
+    switch (step.value.operation.name) {
+      case 'cross':
+        step.value.result = step.value.operation(step.value.expression, selectedExpression.value)
+        break
+      case 'condensation':
+        step.value.result = step.value.operation(selectedExpression.value)
+        break
+      case 'confirmation':
+        step.value.result = step.value.operation(selectedExpression.value)
+        break
+      case 'cancelation':
+        step.value.result = step.value.operation(selectedExpression.value)
+        break
+      case 'compensation':
+        step.value.result = step.value.operation(selectedExpression.value)
+        break
+    }
   }
 }
 
@@ -37,12 +53,15 @@ const execute = () => {
 const selectedExpression = ref({} as DistinctionType)
 
 const distinctionSelected = (expr: DistinctionType) => {
+  // TODO: Need to keep only selected expressions
+
+  
   selectedExpression.value = expr
 }
 
-// const distinctionUnselected = (expr: DistinctionType) => {
-//   selectedExpression.value = {} as DistinctionType
-// }
+const distinctionUnselected = (expr: DistinctionType) => {
+  selectedExpression.value = {} as DistinctionType
+}
 
 const newStep = () => {
   emits('new-step', step.value.result)
@@ -56,7 +75,7 @@ const newStep = () => {
     Distinction(
       :expression="step?.expression"
       @distinction-selected="distinctionSelected"
-      @distinction-unselected="distinctionUnselected")
+    )
   .arrow
     h3 &#8640;
   .result

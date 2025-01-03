@@ -15,14 +15,13 @@ const props = defineProps({
 const emits = defineEmits(['distinction-selected', 'distinction-unselected'])
 
 const select = (event: Event, expr: DistinctionType) => {
-  event.stopPropagation()
   console.log('expr', expr)
-
   expr.selected = !expr.selected
   if (expr.selected) {
       emits('distinction-selected', expr)
     } else {
-      emits('distinction-unselected', expr)
+      event.stopPropagation()
+      //emits('distinction-unselected', expr)
     }
 }
 
@@ -35,8 +34,8 @@ const select = (event: Event, expr: DistinctionType) => {
   .name {{ expression?.name || '&nbsp;' }}
   .space(v-if="Array.isArray(expression?.space)")
     Distinction(v-for="e in expression?.space" :key="e.name" :expression="e")
-  .space(v-if="typeof expression?.space === 'object' && expression?.space !== null && Object.keys(expression?.space).length > 0")
-    Distinction(:expression="expression?.space")
+  //.space(v-if="typeof expression?.space === 'object' && expression?.space !== null && Object.keys(expression?.space).length > 0")
+    //Distinction(:expression="expression?.space")
 </template>
 
 <style scoped>
@@ -51,6 +50,11 @@ const select = (event: Event, expr: DistinctionType) => {
 .name {
   align-self: flex-start;
   padding: 0 5px 0 0;
+}
+
+.space {
+  display: flex;
+  flex-direction: row-reverse;
 }
 
 .selected {
